@@ -1,16 +1,17 @@
 
 import { Fade } from "react-awesome-reveal";
+import Banner from "./Banner";
 
 
 const Home = () => {
   return (
     <div>
-      {/* <Banner />
+      <Banner />
       <main>
-        <FeturedRoommate/>
+        {/* <FeturedRoommate/>
         <Fade><Counter/></Fade>
-        <WhyChoose/>
-      </main> */}
+        <WhyChoose/> */}
+      </main>
     </div>
   );
 };
