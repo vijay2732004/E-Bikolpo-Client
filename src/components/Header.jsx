@@ -1,31 +1,30 @@
-import { Link, NavLink } from "react-router-dom";
-//import ThemeToggle from "./ThemeToggle";
-//import { AuthContext } from "../Provider/AuthContext";
-//import { use } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Provider/AuthContext";
+import { use } from "react";
 import Swal from "sweetalert2";
 import "../../src/App";
 import { Typewriter } from "react-simple-typewriter";
 
 const Header = () => {
-  //const { user, logout } = use(AuthContext);
-  // const navigate = useNavigate();
+  const { user, logout } = use(AuthContext);
+  const navigate = useNavigate();
 
-  // const logoutBtn = () => {
-  //   logout()
-  //     .then(() => {
-  //       Swal.fire({
-  //         position: "top-end",
-  //         icon: "success",
-  //         title: "Logout Seccessfull",
-  //         showConfirmButton: false,
-  //         timer: 1500,
-  //       });
-  //       navigate("/");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error signing out:", error);
-  //     });
-  // };
+  const logoutBtn = () => {
+    logout()
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logout Seccessfull",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
+  };
 
   const links = (
     <ul className="p-2 lg:flex justify-center items-center gap-1 font-bold">
@@ -35,16 +34,13 @@ const Header = () => {
       <li>
         <NavLink to="/quires">Quires</NavLink>
       </li>
-      <li>
-        <NavLink to="/login">Login</NavLink>
-      </li>
       {/* <li>
         <NavLink to="/"></NavLink>
       </li>
       <li>
         <NavLink to="/"></NavLink>
       </li> */}
-      {/* {user ? (
+      {user ? (
         <button onClick={logoutBtn} className="btn md:hidden">
           Logout
         </button>
@@ -57,7 +53,7 @@ const Header = () => {
             <NavLink to="/registration">Register</NavLink>
           </li>
         </div>
-      )} */}
+      )}
     </ul>
   );
   return (
@@ -108,7 +104,7 @@ const Header = () => {
         <div className="mr-2">
           {/* <ThemeToggle /> */}
         </div>
-        {/* {user ? (
+        {user ? (
           <>
             <div
               className="tooltip tooltip-bottom z-10"
@@ -141,7 +137,7 @@ const Header = () => {
               Register
             </Link>
           </div>
-        )} */}
+        )} 
       </div>
     </div>
   );

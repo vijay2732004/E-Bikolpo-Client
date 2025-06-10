@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
-  //const { singIn, googleLogin } = use(AuthContext);
+  const { singIn, googleLogin } = use(AuthContext);
   const [password, setPassword] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
