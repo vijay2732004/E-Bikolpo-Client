@@ -1,6 +1,8 @@
 
 import { Fade } from "react-awesome-reveal";
 import Banner from "./Banner";
+import Counter from "./Counter";
+import WhyChoose from "./WhyChoose";
 
 
 const Home = () => {
@@ -8,9 +10,9 @@ const Home = () => {
     <div>
       <Banner />
       <main>
-        {/* <FeturedRoommate/>
+        {/* <FeturedRoommate/> */}
         <Fade><Counter/></Fade>
-        <WhyChoose/> */}
+        <WhyChoose/>
       </main>
     </div>
   );

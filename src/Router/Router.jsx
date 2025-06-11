@@ -8,6 +8,9 @@ import ErrorPage from "../components/ErrorPage";
 import Queries from "../components/Queries";
 import Login from "../components/Login";
 import Register from "../components/Registration";
+import RecommendationsForMe from "../components/RecommendationsForMe";
+import MyQueries from "../components/MyQueries";
+import MyRecommendations from "../components/MyRecommendations";
 
 
 
@@ -20,6 +23,9 @@ const router = createBrowserRouter([
       {path: "/quires", Component: Queries},
       {path: "/login", Component: Login},
       {path: "/register", Component: Register},
+      {path: "/recommendationsForMe", Component: RecommendationsForMe},
+      {path: "/myQueries", Component: MyQueries},
+      {path: "/myRecommendations", Component: MyRecommendations},
     ]
   },
   {

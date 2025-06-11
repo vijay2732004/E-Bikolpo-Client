@@ -1,10 +1,8 @@
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
 const Footer = () => {
   return (
     <footer className="bg-base-300 py-8 px-4">
-      <div className="w-11/12 mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <div className="w-11/12 mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
         
         {/* Contact */}
         <div>
@@ -14,15 +12,6 @@ const Footer = () => {
           <p>Address: Mymensingh, Bangladesh</p>
         </div>
 
-        {/* Terms */}
-        <div>
-          <h3 className="text-xl font-semibold mb-5">Information</h3>
-          <ul>
-            <li><Link to="/termsandconditions" className="hover:underline">Terms & Conditions</Link></li>
-            <li><Link to="/privacypolicy" className="hover:underline">Privacy Policy</Link></li>
-            <li><Link to="/faq" className="hover:underline">FAQs</Link></li>
-          </ul>
-        </div>
 
         {/* Social Media */}
         <div>

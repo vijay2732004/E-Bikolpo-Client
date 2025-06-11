@@ -34,12 +34,16 @@ const Header = () => {
       <li>
         <NavLink to="/quires">Quires</NavLink>
       </li>
-      {/* <li>
-        <NavLink to="/"></NavLink>
+      {user && <>
+      <li>
+        <NavLink to="/recommendationsForMe">Recommendations For Me</NavLink>
       </li>
       <li>
-        <NavLink to="/"></NavLink>
-      </li> */}
+        <NavLink to="/myQueries">My Queries</NavLink>
+      </li>
+      <li>
+        <NavLink to="/myRecommendations">My recommendations</NavLink>
+      </li></>}
       {user ? (
         <button onClick={logoutBtn} className="btn md:hidden">
           Logout
@@ -47,10 +51,10 @@ const Header = () => {
       ) : (
         <div className="md:hidden">
           <li>
-            <NavLink to="/login">Login</NavLink>
+            <Link to="/login">Login</Link>
           </li>
           <li>
-            <NavLink to="/registration">Register</NavLink>
+            <Link to="/register">Register</Link>
           </li>
         </div>
       )}
@@ -133,7 +137,7 @@ const Header = () => {
             <Link to="/login" className="btn">
               Login
             </Link>
-            <Link to="/registration" className="btn ml-1">
+            <Link to="/register" className="btn ml-1">
               Register
             </Link>
           </div>
