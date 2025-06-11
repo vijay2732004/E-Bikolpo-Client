@@ -1,0 +1,110 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth'; // if you're using context for user
+
+const QueryDetails = () => {
+  const { id } = useParams();
+  const { user } = useAuth(); // get current user
+  const [query, setQuery] = useState(null);
+  const [recommendations, setRecommendations] = useState([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    productName: '',
+    productImage: '',
+    reason: ''
+  });
+
+  useEffect(() => {
+    fetch(`https://your-server.com/queries/${id}`)
+      .then(res => res.json())
+      .then(data => setQuery(data));
+
+    fetch(`https://your-server.com/recommendations?queryId=${id}`)
+      .then(res => res.json())
+      .then(data => setRecommendations(data));
+  }, [id]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newRecommendation = {
+      ...formData,
+      queryId: id,
+      queryTitle: query.queryTitle,
+      productName: query.productName,
+      userEmail: query.email,
+      userName: query.userName,
+      recommenderEmail: user.email,
+      recommenderName: user.displayName,
+      timestamp: new Date().toISOString()
+    };
+
+    const res = await fetch(`https://your-server.com/recommendations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newRecommendation)
+    });
+
+    if (res.ok) {
+      // Increment recommendation count
+      await fetch(`https://your-server.com/queries/${id}/increment`, {
+        method: 'PATCH'
+      });
+
+      // Update UI
+      setRecommendations(prev => [...prev, newRecommendation]);
+      setFormData({ title: '', productName: '', productImage: '', reason: '' });
+    }
+  };
+
+  return (
+    <div className="w-11/12 mx-auto py-10">
+      {query && (
+        <div className="mb-10">
+          <h2 className="text-3xl font-bold">{query.queryTitle}</h2>
+          <p className="text-lg text-gray-600">Product: {query.productName} ({query.productBrand})</p>
+          <div className="flex items-center mt-4">
+            <img src={query.userImage} alt="user" className="w-12 h-12 rounded-full mr-3" />
+            <div>
+              <p>{query.userName}</p>
+              <p className="text-sm text-gray-500">{new Date(query.timestamp).toLocaleString()}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="bg-base-200 p-6 rounded-lg mb-10">
+        <h3 className="text-xl font-semibold mb-4">Add Your Recommendation</h3>
+        <input type="text" required placeholder="Recommendation Title" className="input input-bordered w-full mb-4"
+          value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+        <input type="text" required placeholder="Recommended Product Name" className="input input-bordered w-full mb-4"
+          value={formData.productName} onChange={(e) => setFormData({ ...formData, productName: e.target.value })} />
+        <input type="url" required placeholder="Recommended Product Image URL" className="input input-bordered w-full mb-4"
+          value={formData.productImage} onChange={(e) => setFormData({ ...formData, productImage: e.target.value })} />
+        <textarea required placeholder="Reason for Recommendation" className="textarea textarea-bordered w-full mb-4"
+          value={formData.reason} onChange={(e) => setFormData({ ...formData, reason: e.target.value })} />
+        <button className="btn btn-success w-full">Add Recommendation</button>
+      </form>
+
+      <div>
+        <h3 className="text-2xl font-bold mb-4">Recommendations</h3>
+        {recommendations.map((rec, i) => (
+          <div key={i} className="bg-base-100 p-4 rounded-xl shadow mb-4">
+            <div className="flex items-center mb-2">
+              <img src={rec.productImage} alt="product" className="w-16 h-16 rounded mr-3" />
+              <div>
+                <p className="font-semibold">{rec.title}</p>
+                <p className="text-sm text-gray-500">Recommended by {rec.recommenderName}</p>
+              </div>
+            </div>
+            <p>{rec.reason}</p>
+            <p className="text-sm text-right text-gray-400 mt-2">
+              {new Date(rec.timestamp).toLocaleString()}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default QueryDetails;
