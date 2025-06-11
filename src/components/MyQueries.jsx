@@ -1,11 +1,73 @@
-import React from 'react';
+import React, { use, useState } from "react";
+// import { collection, query, where, getDocs, deleteDoc, doc, orderBy } from "firebase/firestore";
+// import { db } from "../firebase/firebase";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Provider/AuthContext";
 
 const MyQueries = () => {
-    return (
-        <div>
-            MyQueries
+  const { user } = use(AuthContext);
+  const [queries, setQueries] = useState([]);
+  const navigate = useNavigate();
+
+//   const fetchQueries = async () => {
+//     const q = query(
+//       collection(db, "queries"),
+//       where("userEmail", "==", user.email),
+//       orderBy("createdAt", "desc")
+//     );
+//     const snap = await getDocs(q);
+//     const userQueries = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+//     setQueries(userQueries);
+//   };
+
+//   const handleDelete = async (id) => {
+//     const confirm = window.confirm("Are you sure you want to delete this query?");
+//     if (confirm) {
+//       await deleteDoc(doc(db, "queries", id));
+//       fetchQueries();
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchQueries();
+//   }, []);
+
+  return (
+    <section className="w-11/12 mx-auto my-10">
+      {/* Banner */}
+      <div className="bg-base-300 p-6 rounded-xl text-center mb-6">
+        <h2 className="text-2xl font-bold mb-2">📌 My Product Queries</h2>
+        <button className="btn btn-primary" onClick={() => navigate("/addQueries")}>
+          ➕ Add New Query
+        </button>
+      </div>
+
+      {/* Query Grid */}
+      {queries.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {queries.map((q) => (
+            <div key={q.id} className="bg-base-200 p-4 rounded-xl shadow">
+              <img src={q.productImage} alt={q.productName} className="w-full h-40 object-cover rounded mb-2" />
+              <h3 className="text-xl font-bold">{q.productName}</h3>
+              <p className="text-sm mb-2">{q.queryTitle}</p>
+              <div className="flex flex-wrap gap-2 mt-4">
+                <button className="btn btn-outline btn-info btn-sm" onClick={() => navigate(`/query/${q.id}`)}>View Details</button>
+                <button className="btn btn-outline btn-warning btn-sm" onClick={() => navigate(`/update-query/${q.id}`)}>Update</button>
+                <button className="btn btn-outline btn-error btn-sm" onClick={() => handleDelete(q.id)}>Delete</button>
+              </div>
+            </div>
+          ))}
         </div>
-    );
+      ) : (
+        <div className="text-center mt-10">
+          <p className="text-xl">🚫 No queries found.</p>
+          <button className="btn btn-primary mt-4" onClick={() => navigate("/addQueries")}>
+            Add Your First Query
+          </button>
+        </div>
+      )}
+    </section>
+  );
 };
 
 export default MyQueries;

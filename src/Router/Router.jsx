@@ -11,6 +11,8 @@ import Register from "../components/Registration";
 import RecommendationsForMe from "../components/RecommendationsForMe";
 import MyQueries from "../components/MyQueries";
 import MyRecommendations from "../components/MyRecommendations";
+import PrivetRoute from "./PrivetRoute";
+import AddQuery from "../components/AddQueries";
 
 
 
@@ -24,7 +26,8 @@ const router = createBrowserRouter([
       {path: "/login", Component: Login},
       {path: "/register", Component: Register},
       {path: "/recommendationsForMe", Component: RecommendationsForMe},
-      {path: "/myQueries", Component: MyQueries},
+      {path: "/myQueries", element: <PrivetRoute><MyQueries/></PrivetRoute>},
+      {path: "/addQueries", element: <PrivetRoute><AddQuery/></PrivetRoute>},
       {path: "/myRecommendations", Component: MyRecommendations},
     ]
   },

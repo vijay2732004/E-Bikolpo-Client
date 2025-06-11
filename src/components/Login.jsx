@@ -1,8 +1,8 @@
 import React, { use, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { AuthContext } from "../Provider/AuthContext";
 import Swal from "sweetalert2";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AuthContext } from "../Provider/AuthContext";
 
 const Login = () => {
   const { singIn, googleLogin } = use(AuthContext);
@@ -59,7 +59,7 @@ const Login = () => {
   };
 
   //google login
-  const handleGoogleSubmit = () => {
+const handleGoogleSubmit = () => {
     googleLogin()
       .then(() => {
         if (location.state) {
