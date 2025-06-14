@@ -1,10 +1,10 @@
 import React, { use, useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthContext";
+import Swal from "sweetalert2";
 
 const AddQuery = () => {
-  const { user } = use(AuthContext); // Must return { email, displayName, photoURL }
+  const { user } = use(AuthContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -16,29 +16,45 @@ const AddQuery = () => {
   });
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // const queryData = {
-    //   ...formData,
-    //   userEmail: user.email,
-    //   userName: user.displayName,
-    //   userPhoto: user.photoURL,
-    //   recommendationCount: 0,
-    //   createdAt: new Date().toISOString(),
-    // };
+    const queryData = {
+      ...formData,
+      userEmail: user.email,
+      userName: user.displayName,
+      userPhoto: user.photoURL,
+      recommendationCount: 0,
+      createdAt: new Date().toISOString(),
+    };
 
-//     try {
-//       await addDoc(collection(db, "queries"), queryData);
-//       alert("Query added successfully!");
-//       navigate("/my-queries");
-//     } catch (error) {
-//       console.error("Error adding query:", error);
-//     }
-   };
+    fetch("http://localhost:3000/addQueries", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(queryData),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        Swal.fire({
+          title: "Post successfull",
+          icon: "success",
+          draggable: true,
+        });
+        navigate('/myQueries')
+        setFormData({
+          productName: "",
+          productBrand: "",
+          productImage: "",
+          queryTitle: "",
+          reason: "",
+        });
+      });
+  };
 
   return (
     <section className="w-11/12 mx-auto my-10 p-6 bg-base-200 rounded-xl shadow-lg">

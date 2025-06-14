@@ -1,6 +1,4 @@
-import React, { use, useState } from "react";
-// import { collection, query, where, getDocs, deleteDoc, doc, orderBy } from "firebase/firestore";
-// import { db } from "../firebase/firebase";
+import React, { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthContext";
 
@@ -9,28 +7,26 @@ const MyQueries = () => {
   const [queries, setQueries] = useState([]);
   const navigate = useNavigate();
 
-//   const fetchQueries = async () => {
-//     const q = query(
-//       collection(db, "queries"),
-//       where("userEmail", "==", user.email),
-//       orderBy("createdAt", "desc")
-//     );
-//     const snap = await getDocs(q);
-//     const userQueries = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-//     setQueries(userQueries);
-//   };
 
-//   const handleDelete = async (id) => {
-//     const confirm = window.confirm("Are you sure you want to delete this query?");
-//     if (confirm) {
-//       await deleteDoc(doc(db, "queries", id));
-//       fetchQueries();
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchQueries();
-//   }, []);
+  useEffect(() => {
+    fetch('http://localhost:3000/myQueries',{
+      method: "GET",
+      headers: {
+        'content-type' : 'application/json'
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.length > 0) {
+        setQueries(data);
+      } else {
+        setQueries([]);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching queries:", error);
+    });
+  }, []);
 
   return (
     <section className="w-11/12 mx-auto my-10">

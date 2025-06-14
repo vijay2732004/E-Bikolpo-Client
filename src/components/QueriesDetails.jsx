@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth'; // if you're using context for user
+import { AuthContext } from '../Provider/AuthContext';
 
 const QueryDetails = () => {
   const { id } = useParams();
-  const { user } = useAuth(); // get current user
+  const { user } = use(AuthContext);
   const [query, setQuery] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [formData, setFormData] = useState({
