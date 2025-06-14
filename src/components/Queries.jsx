@@ -8,15 +8,18 @@ const AllQueries = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/queries')
-      .then(res => res.json())
-      .then(data => {
-        setLoading(true);
-        const sorted = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        setQueries(sorted);
-        setLoading(false);
-      });
-  }, []);
+  setLoading(true);
+
+  fetch('http://localhost:3000/queries')
+    .then(res => res.json())
+    .then(data => {
+      const sorted = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setQueries(sorted);
+    })
+    .catch(err => console.error(err))
+    .finally(() => setLoading(false));
+}, []);
+
 
   if (loading) {
     return (
@@ -28,7 +31,7 @@ const AllQueries = () => {
     <div className="w-11/12 mx-auto py-10">
       <h2 className="text-3xl font-bold text-center mb-8">Explore Product Boycott Queries</h2>
       <button className="btn btn-secondary mb-4 hidden md:block" onClick={() => setToggle(!toggle)}>
-          {toggle ? 'Show Less' : 'Show More'}
+          {toggle ? 'Show More' : 'Show Less'}
         </button>
       <div className={`grid gap-6 grid-cols-1` + (toggle ? ' lg:grid-cols-2 md:grid-cols-1' : ' lg:grid-cols-3 md:grid-cols-2')}>
         
@@ -38,7 +41,7 @@ const AllQueries = () => {
             <h3 className="text-xl font-bold">{query.queryTitle}</h3>
             <p><strong>Product:</strong> {query.productName} ({query.productBrand})</p>
             <p className="mt-2"><strong>Recommendations:</strong> {query.recommendationCount}</p>
-            <Link to={`/queries/${query._id}`}>
+            <Link to={`/QueriesDetails/${query._id}`}>
               <button className="btn btn-primary mt-4 w-full">💡 Recommend</button>
             </Link>
           </div>

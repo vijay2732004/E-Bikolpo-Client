@@ -1,15 +1,18 @@
 import React, { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthContext";
+import Loading from "./Loading";
+import Swal from "sweetalert2";
 
 const MyQueries = () => {
   const { user } = use(AuthContext);
   const [queries, setQueries] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    fetch('http://localhost:3000/myQueries',{
+    fetch(`http://localhost:3000/myQueries?email=${user.email}`,{
       method: "GET",
       headers: {
         'content-type' : 'application/json'
@@ -17,16 +20,52 @@ const MyQueries = () => {
     })
     .then((res) => res.json())
     .then((data) => {
+      setLoading(true);
       if (data.length > 0) {
         setQueries(data);
       } else {
         setQueries([]);
       }
+      setLoading(false);
     })
     .catch((error) => {
       console.error("Error fetching queries:", error);
     });
   }, []);
+
+  // Function to handle deletion of a query
+    const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to delete this listing permanently.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/quiresDelete/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount > 0) {
+              Swal.fire(
+                "Deleted!",
+                "Your listing has been deleted.",
+                "success"
+              );
+              setQueries((prev) => prev.filter((post) => post._id !== id));
+            }
+          });
+      }
+    });
+  };
+
+  if(loading){
+    return (
+      <Loading/>
+    )
+  }
 
   return (
     <section className="w-11/12 mx-auto my-10">
@@ -47,9 +86,9 @@ const MyQueries = () => {
               <h3 className="text-xl font-bold">{q.productName}</h3>
               <p className="text-sm mb-2">{q.queryTitle}</p>
               <div className="flex flex-wrap gap-2 mt-4">
-                <button className="btn btn-outline btn-info btn-sm" onClick={() => navigate(`/query/${q.id}`)}>View Details</button>
-                <button className="btn btn-outline btn-warning btn-sm" onClick={() => navigate(`/update-query/${q.id}`)}>Update</button>
-                <button className="btn btn-outline btn-error btn-sm" onClick={() => handleDelete(q.id)}>Delete</button>
+                <button className="btn btn-outline btn-info btn-sm" onClick={() => navigate(`/QueryDetails/${q._id}`)}>View Details</button>
+                <button className="btn btn-outline btn-warning btn-sm" onClick={() => navigate(`/UpdateQuery/${q._id}`)}>Update</button>
+                <button className="btn btn-outline btn-error btn-sm" onClick={() => handleDelete(q._id)}>Delete</button>
               </div>
             </div>
           ))}
