@@ -12,7 +12,7 @@ const MyQueries = () => {
 
 
   useEffect(() => {
-    fetch(`http://localhost:3000/myQueries?email=${user.email}`,{
+    fetch(`http://localhost:3000/myQueries?email=${user?.email}`,{
       method: "GET",
       headers: {
         'content-type' : 'application/json'
@@ -31,7 +31,7 @@ const MyQueries = () => {
     .catch((error) => {
       console.error("Error fetching queries:", error);
     });
-  }, []);
+  }, [user?.email]);
 
   // Function to handle deletion of a query
     const handleDelete = (id) => {

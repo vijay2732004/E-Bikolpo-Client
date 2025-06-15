@@ -2,12 +2,14 @@ import React, { use, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthContext';
 import Loading from './Loading';
+import Swal from 'sweetalert2';
 
 const QueryDetails = () => {
   const { id } = useParams();
   console.log(id);
   const { user } = use(AuthContext);
   const [query, setQuery] = useState(null);
+  console.log(query);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +41,7 @@ const QueryDetails = () => {
       queryId: id,
       queryTitle: query.queryTitle,
       productName: query.productName,
-      userEmail: query.email,
+      postOwnerEmail: query.userEmail,
       userName: query.userName,
       recommenderEmail: user.email,
       recommenderName: user.displayName,
@@ -58,6 +60,11 @@ const QueryDetails = () => {
       });
 
       setRecommendations(prev => [...prev, newRecommendation]);
+       e.target.title.value = '';
+       e.target.recProductName.value = '';
+       e.target.productImage.value = '';
+       e.target.reason.value = '';
+      Swal.fire('Recommendation added successfully!');
     }
   };
 

@@ -1,17 +1,31 @@
 import React, { use, useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { AuthContext } from "../Provider/AuthContext";
+import Loading from "./Loading";
 
 const RecommendationsForMe = () => {
   const { user } = use(AuthContext);
   const [recommendations, setRecommendations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch recommendations for the logged-in user's queries
-    fetch(`/api/recommendations/for-user-queries?email=${user.email}`)
+    setLoading(true);
+    fetch(`http://localhost:3000/for-user-queries?email=${user?.email}`)
       .then((res) => res.json())
-      .then((data) => setRecommendations(data));
-  }, [user.email]);
+      .then((data) => {
+        setRecommendations(data);
+        setLoading(false);
+      })
+            .catch((err) => {
+        console.error("Error fetching queries:", err);
+        setLoading(false);
+      });
+      
+  }, [user?.email]);
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <div className="w-11/12 mx-auto my-12">
@@ -40,9 +54,9 @@ const RecommendationsForMe = () => {
               {recommendations.map((rec, index) => (
                 <tr key={rec._id}>
                   <td>{index + 1}</td>
-                  <td>{rec.queryTitle}</td>
-                  <td>{rec.recommendedProductName}</td>
-                  <td>{rec.recommendationReason}</td>
+                  <td>{rec.title}</td>
+                  <td>{rec.recProductName}</td>
+                  <td>{rec.reason}</td>
                   <td className="flex items-center gap-2">
                     {rec.recommenderProfileImg ? (
                       <img

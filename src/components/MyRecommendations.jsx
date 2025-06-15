@@ -5,7 +5,6 @@ import Loading from "./Loading";
 
 const MyRecommendations = () => {
   const { user } = use(AuthContext);
-  console.log(user);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,32 +32,33 @@ useEffect(() => {
 
   
 
-  const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "This recommendation will be permanently deleted!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
+const handleDelete = async (recommendationId, queryId) => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "This recommendation will be permanently deleted!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+  });
+
+  if (result.isConfirmed) {
+    const res = await fetch(`http://localhost:3000/recommendations/${recommendationId}`, {
+      method: "DELETE",
     });
 
-    if (result.isConfirmed) {
-      const res = await fetch(`http://localhost:3000/recommendations/${id}`, {
-        method: "DELETE",
+    if (res.ok) {
+      await fetch(`http://localhost:3000/queries/${queryId}/decrease`, {
+        method: "PATCH",
       });
 
-      if (res.ok) {
-        await fetch(`http://localhost:3000/querie/${id}/decrease`, {
-          method: "PATCH",
-        });
-
-        setRecommendations(prev => prev.filter(r => r._id !== id));
-        Swal.fire("Deleted!", "Your recommendation has been deleted.", "success");
-      } else {
-        Swal.fire("Error!", "Failed to delete the recommendation.", "error");
-      }
+      setRecommendations(prev => prev.filter(r => r._id !== recommendationId));
+      Swal.fire("Deleted!", "Your recommendation has been deleted.", "success");
+    } else {
+      Swal.fire("Error!", "Failed to delete the recommendation.", "error");
     }
-  };
+  }
+};
+
 
 
 
@@ -91,7 +91,7 @@ useEffect(() => {
                   <td>{new Date(rec.timestamp).toLocaleDateString()}</td>
                   <td>
                     <button
-                      onClick={() => handleDelete(rec._id)}
+                      onClick={() => handleDelete(rec._id, rec.queryId)}
                       className="btn btn-sm btn-error"
                     >
                       Delete
