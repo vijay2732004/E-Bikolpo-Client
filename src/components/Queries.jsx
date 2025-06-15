@@ -4,40 +4,69 @@ import Loading from './Loading';
 
 const AllQueries = () => {
   const [queries, setQueries] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [toggle, setToggle] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  setLoading(true);
+    setLoading(true);
 
-  fetch('http://localhost:3000/queries')
-    .then(res => res.json())
-    .then(data => {
-      const sorted = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      setQueries(sorted);
-    })
-    .catch(err => console.error(err))
-    .finally(() => setLoading(false));
-}, []);
-
+    fetch('http://localhost:3000/queries')
+      .then(res => res.json())
+      .then(data => {
+        const sorted = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setQueries(sorted);
+      })
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
 
   if (loading) {
-    return (
-      <Loading/>
-    );
-  };
+    return <Loading />;
+  }
+
+  const filteredQueries = queries.filter(query =>
+    query.queryTitle.trim().toLowerCase().includes(searchTerm.trim().toLowerCase())
+  );
 
   return (
     <div className="w-11/12 mx-auto py-10">
       <h2 className="text-3xl font-bold text-center mb-8">Explore Product Boycott Queries</h2>
-      <button className="btn btn-secondary mb-4 hidden md:block" onClick={() => setToggle(!toggle)}>
-          {toggle ? 'Show More' : 'Show Less'}
-        </button>
-      <div className={`grid gap-6 grid-cols-1` + (toggle ? ' lg:grid-cols-2 md:grid-cols-1' : ' lg:grid-cols-3 md:grid-cols-2')}>
-        
-        {queries.map(query => (
-          <div key={query._id} className="bg-base-100 shadow-md rounded-xl p-5 border-2 flex flex-col justify-between">
-            <img src={query.productImage} alt={query.productName} className="h-48 w-full object-cover rounded-lg mb-4" />
+
+      <div className='flex items-center gap-3 mb-6 justify-between'>
+       <div>
+               <input
+        type="text"
+        placeholder="Search by product name"
+        className="input input-bordered mb-6"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+       </div>
+
+      <button
+        className="btn btn-secondary mb-4 hidden md:block"
+        onClick={() => setToggle(!toggle)}
+      >
+        {toggle ? 'Show More' : 'Show Less'}
+      </button>
+      </div>
+
+      <div
+        className={`grid gap-6 grid-cols-1${
+          toggle ? ' lg:grid-cols-2 md:grid-cols-1' : ' lg:grid-cols-3 md:grid-cols-2'
+        }`}
+      >
+        {filteredQueries.map(query => (
+          <div
+            key={query._id}
+            className="bg-base-100 shadow-md rounded-xl p-5 border-2 flex flex-col justify-between"
+          >
+            <img
+              src={query.productImage}
+              alt={query.productName}
+              className="h-48 w-full object-cover rounded-lg mb-4"
+            />
             <h3 className="text-xl font-bold">{query.queryTitle}</h3>
             <p><strong>Product:</strong> {query.productName} ({query.productBrand})</p>
             <p className="mt-2"><strong>Recommendations:</strong> {query.recommendationCount}</p>
