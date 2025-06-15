@@ -14,6 +14,7 @@ import MyRecommendations from "../components/MyRecommendations";
 import PrivetRoute from "./PrivetRoute";
 import AddQuery from "../components/AddQueries";
 import UpdateQueires from "../components/UpdateQueires";
+import QueryDetails from "../components/QueriesDetails";
 
 
 
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       {path: "/addQueries", element: <PrivetRoute><AddQuery/></PrivetRoute>},
       {path: "/myRecommendations", Component: MyRecommendations},
       {path: "/UpdateQuery/:id", Component: UpdateQueires},
+      {path: "/QueryDetails/:id", Component: QueryDetails},
     ]
   },
   {

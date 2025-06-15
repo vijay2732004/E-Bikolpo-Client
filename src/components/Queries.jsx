@@ -41,7 +41,7 @@ const AllQueries = () => {
             <h3 className="text-xl font-bold">{query.queryTitle}</h3>
             <p><strong>Product:</strong> {query.productName} ({query.productBrand})</p>
             <p className="mt-2"><strong>Recommendations:</strong> {query.recommendationCount}</p>
-            <Link to={`/QueriesDetails/${query._id}`}>
+            <Link to={`/QueryDetails/${query._id}`}>
               <button className="btn btn-primary mt-4 w-full">💡 Recommend</button>
             </Link>
           </div>

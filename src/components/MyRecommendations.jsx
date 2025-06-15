@@ -1,18 +1,39 @@
 import React, { use, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../Provider/AuthContext";
+import Loading from "./Loading";
 
 const MyRecommendations = () => {
   const { user } = use(AuthContext);
+  console.log(user);
   const [recommendations, setRecommendations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch(`/api/recommendations?email=${user.email}`)
-      .then(res => res.json())
-      .then(data => setRecommendations(data));
-  }, [user.email]);
 
-  const handleDelete = async (id, queryId) => {
+  
+useEffect(() => {
+  if (user?.email) {
+    setLoading(true)
+    fetch(`http://localhost:3000/recommendations?email=${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setRecommendations(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching queries:", err);
+        setLoading(false);
+      });
+  }
+}, [user?.email]);
+
+    if(loading) {
+    return <Loading />;
+  }
+
+  
+
+  const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "This recommendation will be permanently deleted!",
@@ -22,12 +43,12 @@ const MyRecommendations = () => {
     });
 
     if (result.isConfirmed) {
-      const res = await fetch(`/api/recommendations/${id}`, {
+      const res = await fetch(`http://localhost:3000/recommendations/${id}`, {
         method: "DELETE",
       });
 
       if (res.ok) {
-        await fetch(`/api/queries/${queryId}/decrease-recommendation-count`, {
+        await fetch(`http://localhost:3000/querie/${id}/decrease`, {
           method: "PATCH",
         });
 
@@ -38,6 +59,8 @@ const MyRecommendations = () => {
       }
     }
   };
+
+
 
   return (
     <div className="w-11/12 mx-auto my-12">
@@ -62,13 +85,13 @@ const MyRecommendations = () => {
               {recommendations.map((rec, index) => (
                 <tr key={rec._id}>
                   <td>{index + 1}</td>
-                  <td>{rec.queryTitle}</td>
-                  <td>{rec.recommendedProductName}</td>
-                  <td>{rec.recommendationReason}</td>
+                  <td>{rec.title}</td>
+                  <td>{rec.recProductName}</td>
+                  <td>{rec.reason}</td>
                   <td>{new Date(rec.timestamp).toLocaleDateString()}</td>
                   <td>
                     <button
-                      onClick={() => handleDelete(rec._id, rec.queryId)}
+                      onClick={() => handleDelete(rec._id)}
                       className="btn btn-sm btn-error"
                     >
                       Delete

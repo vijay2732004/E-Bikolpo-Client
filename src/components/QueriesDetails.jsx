@@ -1,33 +1,41 @@
 import React, { use, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthContext';
+import Loading from './Loading';
 
 const QueryDetails = () => {
   const { id } = useParams();
+  console.log(id);
   const { user } = use(AuthContext);
   const [query, setQuery] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-  const [formData, setFormData] = useState({
-    title: '',
-    productName: '',
-    productImage: '',
-    reason: ''
-  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://your-server.com/queries/${id}`)
+
+    fetch(`http://localhost:3000/queries/${id}`)
       .then(res => res.json())
       .then(data => setQuery(data));
 
-    fetch(`https://your-server.com/recommendations?queryId=${id}`)
+    fetch(`http://localhost:3000/recommendationsId?queryId=${id}`)
       .then(res => res.json())
-      .then(data => setRecommendations(data));
+      .then(data => {
+        setRecommendations(data);
+        setLoading(false);
+      });
   }, [id]);
+
+  if(loading){
+    return <Loading />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newRecommendation = {
-      ...formData,
+      title: e.target.title.value,
+      recProductName: e.target.recProductName.value,
+      productImage: e.target.productImage.value,
+      reason: e.target.reason.value,
       queryId: id,
       queryTitle: query.queryTitle,
       productName: query.productName,
@@ -38,21 +46,18 @@ const QueryDetails = () => {
       timestamp: new Date().toISOString()
     };
 
-    const res = await fetch(`https://your-server.com/recommendations`, {
+    const res = await fetch(`http://localhost:3000/recommendations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newRecommendation)
     });
 
     if (res.ok) {
-      // Increment recommendation count
-      await fetch(`https://your-server.com/queries/${id}/increment`, {
+      await fetch(`http://localhost:3000/queries/${id}/increment`, {
         method: 'PATCH'
       });
 
-      // Update UI
       setRecommendations(prev => [...prev, newRecommendation]);
-      setFormData({ title: '', productName: '', productImage: '', reason: '' });
     }
   };
 
@@ -63,10 +68,10 @@ const QueryDetails = () => {
           <h2 className="text-3xl font-bold">{query.queryTitle}</h2>
           <p className="text-lg text-gray-600">Product: {query.productName} ({query.productBrand})</p>
           <div className="flex items-center mt-4">
-            <img src={query.userImage} alt="user" className="w-12 h-12 rounded-full mr-3" />
+            <img src={query.productImage} alt="user" className="w-12 h-12 rounded-full mr-3" />
             <div>
               <p>{query.userName}</p>
-              <p className="text-sm text-gray-500">{new Date(query.timestamp).toLocaleString()}</p>
+              <p className="text-sm text-gray-500">{new Date(query.createdAt).toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -74,14 +79,10 @@ const QueryDetails = () => {
 
       <form onSubmit={handleSubmit} className="bg-base-200 p-6 rounded-lg mb-10">
         <h3 className="text-xl font-semibold mb-4">Add Your Recommendation</h3>
-        <input type="text" required placeholder="Recommendation Title" className="input input-bordered w-full mb-4"
-          value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
-        <input type="text" required placeholder="Recommended Product Name" className="input input-bordered w-full mb-4"
-          value={formData.productName} onChange={(e) => setFormData({ ...formData, productName: e.target.value })} />
-        <input type="url" required placeholder="Recommended Product Image URL" className="input input-bordered w-full mb-4"
-          value={formData.productImage} onChange={(e) => setFormData({ ...formData, productImage: e.target.value })} />
-        <textarea required placeholder="Reason for Recommendation" className="textarea textarea-bordered w-full mb-4"
-          value={formData.reason} onChange={(e) => setFormData({ ...formData, reason: e.target.value })} />
+        <input type="text" required placeholder="Recommendation Title" className="input input-bordered w-full mb-4" name='title' />
+        <input type="text" required placeholder="Recommended Product Name" className="input input-bordered w-full mb-4" name='recProductName' />
+        <input type="url" required placeholder="Recommended Product Image URL" className="input input-bordered w-full mb-4"  name='productImage' />
+        <textarea required placeholder="Reason for Recommendation" className="textarea textarea-bordered w-full mb-4" name='reason' />
         <button className="btn btn-success w-full">Add Recommendation</button>
       </form>
 
