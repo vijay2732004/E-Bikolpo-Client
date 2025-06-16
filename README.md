@@ -1,12 +1,39 @@
-# React + Vite
+# E-Bikolpo - Product Recommendation Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**E-Bikolpo** is a user-driven product recommendation platform where users can submit boycott queries, add relevant product recommendations, and interact with others' submissions. The app ensures authenticated access to certain features using private routes.
 
-Currently, two official plugins are available:
+## 🔗 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Visit E-Bikolpo](https://e-bikolpo.web.app/) <!-- Replace with your actual deployment link -->
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Features
+
+- 🔐 Firebase Authentication (Email/Password & Google Login)
+- 📝 Add, update, and delete product boycott queries
+- 💬 Add, delete, and manage recommendations per query
+- 🧑‍💻 Private dashboard for:
+  - My Queries
+  - My Recommendations
+  - Recommendations For Me
+- 🗂 View all users’ public queries
+- 🎨 Clean UI with Tailwind CSS and DaisyUI
+- 🧠 Typewriter effect & tooltips for user enhancement
+- ✅ JWT-based protected routes
+- 📱 Responsive Design
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React, React Router DOM, Tailwind CSS, DaisyUI
+- **Auth**: Firebase Authentication
+- **State**: React Context API
+- **Notifications**: SweetAlert2
+- **Protected Routes**: Custom Private Route + Firebase Auth State
+- **Token Management**: Cookie-based JWT (with `js-cookie`)
+
+---
+
+
