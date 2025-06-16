@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import app from '../Firebase/Firebase.config';
 import { AuthContext } from './AuthContext';
+import axios from 'axios';
 
 
 const auth = getAuth(app);
@@ -47,6 +48,16 @@ const googleLogin = () => {
 useEffect(()=>{
     const unsubscribed = onAuthStateChanged(auth, (currentUser)=>{
         setUser(currentUser);
+        //post req with jwt
+        if(currentUser?.email){
+          axios.post('http://localhost:3000/jwt', {email: currentUser?.email})
+          .then(res => {
+            localStorage.setItem('token', res.data.token);
+          })
+          .catch(err => console.error("JWT Error:", err));
+        }else{
+          localStorage.removeItem('token');
+        }
         setLoading(false);
     });
     return () => unsubscribed();
@@ -58,6 +69,7 @@ useEffect(()=>{
 //Logout
   //logout
   const logout = () => {
+    localStorage.removeItem('token');
     return signOut(auth);
   };
 
