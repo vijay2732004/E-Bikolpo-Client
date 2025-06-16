@@ -31,7 +31,7 @@ const AddQuery = () => {
       createdAt: new Date().toISOString(),
     };
 
-    fetch("http://localhost:3000/addQueries", {
+    fetch("https://e-bikolpo-server.vercel.app/addQueries", {
       method: "POST",
       headers: {
         "content-type": "application/json",

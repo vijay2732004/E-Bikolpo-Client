@@ -1,0 +1,23 @@
+.active{
+    background: rgb(131, 131, 204);
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.active:hover{
+  background: rgb(96, 96, 219);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}

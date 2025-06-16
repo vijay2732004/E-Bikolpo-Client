@@ -1,80 +1,83 @@
-import React, { useEffect, useState } from 'react';
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
-import app from '../Firebase/Firebase.config';
-import { AuthContext } from './AuthContext';
-import axios from 'axios';
-
+import React, { useEffect, useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import app from "../Firebase/Firebase.config";
+import { AuthContext } from "./AuthContext";
+import axios from "axios";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-
-const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    //sing up
-    const createSingIn = (email, password) => {
-        setLoading(true);
+  //sing up
+  const createSingIn = (email, password) => {
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
-}
+  };
 
-//updateProfile
+  //updateProfile
   const updateUser = (updatedData) => {
     return updateProfile(auth.currentUser, updatedData);
   };
 
-//sign in
-const singIn = (email, password) => {
+  //sign in
+  const singIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
-}
-
+  };
 
   //sendPasswordResetEmail
-//   const resetEmail = (email) => {
-//     return sendPasswordResetEmail(auth, email);
-//   }
+  //   const resetEmail = (email) => {
+  //     return sendPasswordResetEmail(auth, email);
+  //   }
 
-
-//google sing in
-const googleLogin = () => {
+  //google sing in
+  const googleLogin = () => {
     setLoading(true);
     return signInWithPopup(auth, provider);
-}
+  };
 
-//state
-useEffect(()=>{
-    const unsubscribed = onAuthStateChanged(auth, (currentUser)=>{
-        setUser(currentUser);
-        //post req with jwt
-        if(currentUser?.email){
-          axios.post('http://localhost:3000/jwt', {email: currentUser?.email})
-          .then(res => {
-            localStorage.setItem('token', res.data.token);
+  //state
+  useEffect(() => {
+    const unsubscribed = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      //post req with jwt
+      if (currentUser?.email) {
+        axios
+          .post("https://e-bikolpo-server.vercel.app/jwt", {
+            email: currentUser?.email,
           })
-          .catch(err => console.error("JWT Error:", err));
-        }else{
-          localStorage.removeItem('token');
-        }
-        setLoading(false);
+          .then((res) => {
+            localStorage.setItem("token", res.data.token);
+          })
+          .catch((err) => console.error("JWT Error:", err));
+      } else {
+        localStorage.removeItem("token");
+      }
+      setLoading(false);
     });
     return () => unsubscribed();
-},[]);
+  }, []);
 
-
-
-
-//Logout
+  //Logout
   //logout
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     return signOut(auth);
   };
 
-
-const authData = {
+  const authData = {
     createSingIn,
     loading,
     user,
@@ -82,9 +85,9 @@ const authData = {
     singIn,
     logout,
     googleLogin,
-    updateUser
-}
-return <AuthContext value={authData}>{children}</AuthContext>
+    updateUser,
+  };
+  return <AuthContext value={authData}>{children}</AuthContext>;
 };
 
 export default AuthProvider;

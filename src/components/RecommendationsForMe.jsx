@@ -10,21 +10,22 @@ const RecommendationsForMe = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:3000/for-user-queries?email=${user?.email}`)
+    fetch(
+      `https://e-bikolpo-server.vercel.app/for-user-queries?email=${user?.email}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setRecommendations(data);
         setLoading(false);
       })
-            .catch((err) => {
+      .catch((err) => {
         console.error("Error fetching queries:", err);
         setLoading(false);
       });
-      
   }, [user?.email]);
 
-  if(loading){
-    return <Loading />
+  if (loading) {
+    return <Loading />;
   }
 
   return (
