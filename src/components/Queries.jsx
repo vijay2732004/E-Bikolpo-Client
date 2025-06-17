@@ -28,7 +28,7 @@ const AllQueries = () => {
   }
 
   const filteredQueries = queries.filter((query) =>
-    query.queryTitle
+    query.productName
       .trim()
       .toLowerCase()
       .includes(searchTerm.trim().toLowerCase())
@@ -41,10 +41,10 @@ const AllQueries = () => {
       </h2>
 
       <div className="flex items-center gap-3 mb-6 justify-between">
-        <div>
+        <div className="flex-1">
           <input
             type="text"
-            placeholder="Search by product name"
+            placeholder="Search by boykot product name"
             className="input input-bordered mb-6"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -76,13 +76,13 @@ const AllQueries = () => {
               alt={query.productName}
               className="h-48 w-full object-cover rounded-lg mb-4"
             />
-            <h3 className="text-xl font-bold">{query.queryTitle}</h3>
-            <p>
-              <strong>Product:</strong> {query.productName} (
+            <h3 className="text-xl font-bold">{query.queryTitle} (Recommended Product)</h3>
+            <p className="text-warning">
+              <strong>Boykot Product:</strong> {query.productName} (
               {query.productBrand})
             </p>
             <p className="mt-2">
-              <strong>Recommendations:</strong> {query.recommendationCount}
+              <strong>Peoples Recommendations:</strong> {query.recommendationCount}
             </p>
             <Link to={`/QueryDetails/${query._id}`}>
               <button className="btn btn-primary mt-4 w-full">
