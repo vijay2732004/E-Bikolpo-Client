@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       {path: "/myQueries", element: <PrivetRoute><MyQueries/></PrivetRoute>},
       {path: "/addQueries", element: <PrivetRoute><AddQuery/></PrivetRoute>},
       {path: "/myRecommendations", Component: MyRecommendations},
-      {path: "/UpdateQuery/:id", Component: <PrivetRoute><UpdateQueires/></PrivetRoute>},
+      {path: "/UpdateQuery/:id", element: <PrivetRoute><UpdateQueires/></PrivetRoute>},
       {path: "/QueryDetails/:id", element: <PrivetRoute><QueryDetails/></PrivetRoute>},
     ]
   },

@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthContext } from "../Provider/AuthContext";
 
 const Login = () => {
-  const { singIn, googleLogin } = use(AuthContext);
+  const { singIn, googleLogin, logout, resetEmail } = use(AuthContext);
   const [password, setPassword] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,33 +20,23 @@ const Login = () => {
 
     // login
     singIn(email, password)
-      .then(() => {
-        if (location.state) {
-          navigate(location.state);
+      .then((data) => {
+        if (!data.user.emailVerified) {
+          Swal.fire("Please verify your email before logging in.");
+          logout();
+          return;
         } else {
-          navigate("/");
-        }
-        Swal.fire({
+          if (location.state) {
+            navigate(location.state);
+          } else {
+            navigate("/");
+          }
+                  Swal.fire({
           title: "Login successfully",
           icon: "success",
           draggable: true,
         });
-        // if (!data.user.emailVerified) {
-        //   alert("Please verify your email before logging in.");
-        //   logout();
-        //   return;
-        // } else {
-        //   if (location.state) {
-        //     navigate(location.state);
-        //   } else {
-        //     navigate("/");
-        //   }
-        //           Swal.fire({
-        //   title: "Login successfully",
-        //   icon: "success",
-        //   draggable: true,
-        // });
-        // }
+        }
       })
       .catch((error) => {
         Swal.fire({
@@ -73,37 +63,28 @@ const handleGoogleSubmit = () => {
           draggable: true,
         });
       })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.message,
-          footer: '<a href="#">Why do I have this issue?</a>',
-        });
-      });
   };
 
   //Forget
-  //   const handleForget = () => {
-  //     const email = emailRef.current.value;
-  //     resetEmail(email)
-  //     .then(()=>{
-  //       alert('Sent Reset Password Link in Your Email');
+    const handleForget = () => {
+      const email = emailRef.current.value;
+      resetEmail(email)
+      .then(()=>{
+        Swal.fire('Sent Reset Password Link in Your Email');
 
-  //     }).catch((error) => {
-  //             const errorMessage = error.message;
-  //                     Swal.fire({
-  //   icon: "error",
-  //   title: "Oops...",
-  //   text: error.message,
-  //   footer: '<a href="#">Why do I have this issue?</a>',
-  // });
+      }).catch((error) => {
+                      Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: error.message,
+    footer: '<b href="#">Provide a Email in Email Feild</b>',
+  });
 
-  //           });
-  //   };
+            });
+    };
 
   return (
-    <div className="flex justify-center items-center py-3 w-11/12 mx-auto">
+    <div className="flex justify-center items-center py-30 w-11/12 mx-auto">
       <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
         <legend className="fieldset-legend">Login</legend>
 
@@ -130,7 +111,7 @@ const handleGoogleSubmit = () => {
           <span onClick={()=>setPassword(!password)} className="absolute right-2 cursor-pointer top-1 z-10">{password ? <FaEye /> : <FaEyeSlash />}</span>
           </span>
 
-          <div className="text-right py-1 underline cursor-pointer">
+          <div onClick={handleForget} className="text-right py-1 underline cursor-pointer">
             Forget Password
           </div>
 

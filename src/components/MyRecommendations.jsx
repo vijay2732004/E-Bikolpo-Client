@@ -70,7 +70,7 @@ const MyRecommendations = () => {
   };
 
   return (
-    <div className="w-11/12 mx-auto my-12">
+    <div className="w-11/12 mx-auto py-30">
       <h2 className="text-3xl font-bold mb-6 text-center">
         📝 My Recommendations
       </h2>

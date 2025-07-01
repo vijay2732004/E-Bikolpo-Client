@@ -40,16 +40,24 @@ useEffect(() => {
               <strong>Boykot Product:</strong> {query.productName} (
               {query.productBrand})
             </p>
+            <p className="text-sm text-gray-600 mt-2">
+              <strong>Boykot Reason:</strong> {query.reason}
+            </p>
             <p className="mt-2">
               <strong>Peoples Recommendations:</strong> {query.recommendationCount}
             </p>
             <Link to={`/QueryDetails/${query._id}`}>
               <button className="btn btn-primary mt-4 w-full">
-                💡 Recommend
+                💡 Do Recommend/See More
               </button>
             </Link>
           </div>
         ))}
+        </div>
+        <div className="text-center mt-8">
+          <Link to='/quires' className="btn btn-primary mt-4 text-center">
+                See More
+              </Link>
         </div>
       </section>
     </div>

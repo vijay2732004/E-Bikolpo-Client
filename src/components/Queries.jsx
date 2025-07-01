@@ -27,15 +27,19 @@ const AllQueries = () => {
     return <Loading />;
   }
 
-  const filteredQueries = queries.filter((query) =>
-    query.productName
-      .trim()
-      .toLowerCase()
-      .includes(searchTerm.trim().toLowerCase())
+const filteredQueries = queries.filter((query) => {
+  const term = searchTerm.trim().toLowerCase();
+  return (
+    query.productName?.toLowerCase().includes(term) ||
+    query.productBrand?.toLowerCase().includes(term) ||
+    query.queryTitle?.toLowerCase().includes(term) ||
+    query.reason?.toLowerCase().includes(term)
   );
+});
+
 
   return (
-    <div className="w-11/12 mx-auto py-10">
+    <div className="w-11/12 mx-auto py-30">
       <h2 className="text-3xl font-bold text-center mb-8">
         Explore Product Boycott Queries
       </h2>
@@ -62,8 +66,8 @@ const AllQueries = () => {
       <div
         className={`grid gap-6 grid-cols-1${
           toggle
-            ? " lg:grid-cols-2 md:grid-cols-1"
-            : " lg:grid-cols-3 md:grid-cols-2"
+            ? " lg:grid-cols-3 md:grid-cols-2"
+            : " lg:grid-cols-4 md:grid-cols-3"
         }`}
       >
         {filteredQueries.map((query) => (
@@ -81,12 +85,15 @@ const AllQueries = () => {
               <strong>Boykot Product:</strong> {query.productName} (
               {query.productBrand})
             </p>
+            <p className="text-sm text-gray-600 mt-2">
+              <strong>Boykot Reason:</strong> {query.reason}
+            </p>
             <p className="mt-2">
-              <strong>Peoples Recommendations:</strong> {query.recommendationCount}
+              <strong>Total Recommendations:</strong> {query.recommendationCount}
             </p>
             <Link to={`/QueryDetails/${query._id}`}>
               <button className="btn btn-primary mt-4 w-full">
-                💡 Recommend
+                💡 Do Recommend/See More
               </button>
             </Link>
           </div>

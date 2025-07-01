@@ -68,7 +68,7 @@ const MyQueries = () => {
   }
 
   return (
-    <section className="w-11/12 mx-auto my-10">
+    <section className="w-11/12 mx-auto py-30">
       {/* Banner */}
       <div className="bg-base-300 p-6 rounded-xl text-center mb-6">
         <h2 className="text-2xl font-bold mb-2">📌 My Product Queries</h2>

@@ -57,13 +57,13 @@ const AddQuery = () => {
   };
 
   return (
-    <section className="w-11/12 mx-auto my-10 p-6 bg-base-200 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">📝 Add a New Product Query</h2>
+    <section className="w-11/12 mx-auto my-30 p-6 bg-base-200 rounded-xl shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">📝 Add New Boykot Product</h2>
       <form onSubmit={handleSubmit} className="grid gap-4">
         <input
           type="text"
           name="productName"
-          placeholder="Product Name"
+          placeholder="Title of Boykot Product"
           className="input input-bordered w-full"
           onChange={handleChange}
           required
@@ -71,7 +71,7 @@ const AddQuery = () => {
         <input
           type="text"
           name="productBrand"
-          placeholder="Product Brand"
+          placeholder="Boykot Product Brand Name"
           className="input input-bordered w-full"
           onChange={handleChange}
           required

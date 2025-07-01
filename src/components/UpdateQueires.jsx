@@ -65,7 +65,7 @@ const UpdateQueires = () => {
   };
 
   return (
-    <div className="w-11/12 mx-auto py-10">
+    <div className="w-11/12 mx-auto py-30">
       <h2 className="text-3xl font-bold text-center mb-8">
         Update Your Boycott Query
       </h2>
@@ -74,7 +74,7 @@ const UpdateQueires = () => {
           type="text"
           name="productName"
           value={query.productName}
-          placeholder="Product Name"
+          placeholder="Boykot Product Title"
           onChange={handleChange}
           className="input input-bordered w-full"
         />
@@ -82,7 +82,7 @@ const UpdateQueires = () => {
           type="text"
           name="productBrand"
           value={query.productBrand}
-          placeholder="Product Brand"
+          placeholder="Boykot Product Brand"
           onChange={handleChange}
           className="input input-bordered w-full"
         />

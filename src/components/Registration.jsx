@@ -3,6 +3,7 @@ import { AuthContext } from "../Provider/AuthContext";
 import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { sendEmailVerification } from "firebase/auth";
 
 const Registration = () => {
   const { createSingIn, logout, googleLogin, updateUser } = use(AuthContext);
@@ -56,7 +57,7 @@ const Registration = () => {
     createSingIn(email, password)
       .then((userCredential) => {
         Swal.fire({
-          title: "Registration successfully",
+          title: "Sent verification in your email",
           icon: "success",
           draggable: true,
         });
@@ -93,17 +94,16 @@ const Registration = () => {
           });
 
         //Send verification email
-        //   sendEmailVerification(userCredential.user)
-        //     .then(() => {
-        //       alert('Verification email sent. Please check your inbox.');
-        //       // Logout to prevent auto login before email is verified
-        //       logout().then(() => {
-        //         navigate('/login');
-        //       });
-        //     })
-        //     .catch(() => {
-        //       setError('Failed to send verification email');
-        //     });
+          sendEmailVerification(userCredential.user)
+            .then(() => {
+              // Logout to prevent auto login before email is verified
+              logout().then(() => {
+                navigate('/login');
+              });
+            })
+            .catch(() => {
+              setError('Failed to send verification email');
+            });
       })
       .catch((error) => {
         Swal.fire({
@@ -130,18 +130,10 @@ const Registration = () => {
           draggable: true,
         });
       })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.message,
-          footer: '<a href="#">Why do I have this issue?</a>',
-        });
-      });
   };
 
   return (
-    <div className="flex justify-center items-center py-3 w-11/12 mx-auto">
+    <div className="flex justify-center items-center py-30 w-11/12 mx-auto">
       <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
         <legend className="fieldset-legend">Registration</legend>
 

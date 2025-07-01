@@ -4,6 +4,7 @@ import Banner from "./Banner";
 import Counter from "./Counter";
 import WhyChoose from "./WhyChoose";
 import FeturedRoommate from "./FeturedRoommate";
+import Marquee from "./Marquee";
 
 
 const Home = () => {
@@ -13,6 +14,7 @@ const Home = () => {
       <main>
         <FeturedRoommate/>
         <Fade><Counter/></Fade>
+        <Marquee/>
         <WhyChoose/>
       </main>
     </div>

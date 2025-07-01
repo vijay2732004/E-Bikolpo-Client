@@ -13,6 +13,8 @@ const QueryDetails = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [toggle, setToggle] = useState(false);
+
   useEffect(() => {
     fetch(`https://e-bikolpo-server.vercel.app/queries/${id}`)
       .then((res) => res.json())
@@ -74,34 +76,53 @@ const QueryDetails = () => {
   };
 
   return (
-    <div className="w-11/12 mx-auto py-10">
+    <div className="w-11/12 mx-auto py-30">
       {query && (
-        <div className="mb-10">
-          <h2 className="text-3xl font-bold">{query.queryTitle}</h2>
-          <p className="text-lg text-gray-600">
-            Product: {query.productName} ({query.productBrand})
-          </p>
-          <div className="flex items-center mt-4">
-            <img
-              src={query.productImage}
-              alt="user"
-              className="w-12 h-12 rounded-full mr-3"
-            />
-            <div>
-              <p>{query.userName}</p>
-              <p className="text-sm text-gray-500">
-                {new Date(query.createdAt).toLocaleString()}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+  <div className="mb-10 p-6 rounded-xl shadow-md border border-gray-200 bg-base-300">
+    <h1 className="text-3xl font-bold mb-2 text-center underline">Details of Post</h1>
+    <h2 className="text-3xl font-bold mb-2">{query.queryTitle}</h2>
 
+    <p className="text-l mb-1">
+      <span className="font-medium">Product:</span> {query.productName} ({query.productBrand})
+    </p>
+
+    <p className="text-sm text-red-600 mb-4">
+      <span className="font-semibold">Reason for Boycott:</span> {query.reason}
+    </p>
+
+    <div className="flex items-center mb-4">
+      <img
+        src={query.productImage}
+        alt={query.productName}
+        className="w-20 h-20 object-cover rounded-lg border mr-4"
+      />
+      <div>
+        <p className="font-medium text-gray-800">{query.userName}</p>
+        <p className="text-sm text-gray-500">{query.userEmail}</p>
+        <p className="text-sm text-gray-400">
+          {new Date(query.createdAt).toLocaleString()}
+        </p>
+      </div>
+    </div>
+
+    <div className="text-sm text-gray-600">
+      <span className="font-semibold">Recommendations:</span> {query.recommendationCount}
+    </div>
+  </div>
+)}
+
+<button
+          className="btn btn-primary mb-10"
+          onClick={() =>{ setToggle(!toggle);} }
+        >
+          ➕ Add Your Recommendation
+        </button>
       <form
         onSubmit={handleSubmit}
-        className="bg-base-200 p-6 rounded-lg mb-10"
+        className={`bg-base-200 p-6 rounded-lg mb-10 *:shadow-md ${toggle ? "block" : "hidden"}`}
+        style={{ transition: "all 0.3s ease-in-out" }}
       >
-        <h3 className="text-xl font-semibold mb-4">Add Your Recommendation</h3>
+        <h3 className="text-xl font-semibold mb-4 underline text-center">Add Your Recommendation</h3>
         <input
           type="text"
           required
@@ -133,7 +154,7 @@ const QueryDetails = () => {
       </form>
 
       <div>
-        <h3 className="text-2xl font-bold mb-4">Recommendations</h3>
+        <h3 className="text-2xl font-bold mb-4 underline text-center">All Recommendations</h3>
         {recommendations.map((rec, i) => (
           <div key={i} className="bg-base-100 p-4 rounded-xl shadow mb-4">
             <div className="flex items-center mb-2">
@@ -149,7 +170,7 @@ const QueryDetails = () => {
                 </p>
               </div>
             </div>
-            <p>{rec.reason}</p>
+            <p>Reason for use: {rec.reason}</p>
             <p className="text-sm text-right text-gray-400 mt-2">
               {new Date(rec.timestamp).toLocaleString()}
             </p>

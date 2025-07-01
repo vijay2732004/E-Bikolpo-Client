@@ -33,7 +33,7 @@ const slides = [
 
 const Banner = () => {
   return (
-    <div className="relative">
+    <div className="relative ">
       <Swiper
         className="mySwiper"
         spaceBetween={0}
@@ -47,7 +47,7 @@ const Banner = () => {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
-            <div className="relative h-screen w-full">
+            <div className="relative h-[80vh] w-full">
               {/* Background Image */}
               <img
                 src={slide.image}
